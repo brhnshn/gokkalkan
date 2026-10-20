@@ -1,0 +1,7 @@
+name = "gokkalkan-api"
+main = "src/index.worker.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"

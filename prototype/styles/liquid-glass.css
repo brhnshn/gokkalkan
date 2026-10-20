@@ -1,0 +1,1664 @@
+/**
+ * GokKalkan Liquid Glass & iOS Motion Architecture
+ * High-precision, zero-emoji, tactile design tokens and micro-interactions.
+ */
+
+/* ==========================================================================
+   Base & Reset
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: #0d1117;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  transition: background 0.3s ease;
+}
+
+/* ==========================================================================
+   Desktop Mockup Container (iPhone 16 Pro Frame)
+   ========================================================================== */
+.mockup-wrapper {
+  width: 100%;
+  max-width: 440px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0 32px;
+  transition: max-width 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.4s ease;
+}
+
+.mockup-wrapper.fullscreen-mode {
+  max-width: 100%;
+  padding: 0;
+}
+
+.phone-frame {
+  position: relative;
+  width: 100%;
+  max-width: 412px;
+  height: 890px;
+  background: var(--bg-app);
+  background-image: var(--bg-gradient);
+  border-radius: 54px;
+  box-shadow: var(--mockup-shadow), 0 0 0 12px var(--mockup-bezel), 0 0 0 14px #2f3037;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mockup-wrapper.fullscreen-mode .phone-frame {
+  max-width: 100%;
+  height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+}
+
+/* ==========================================================================
+   iOS Dynamic Island & Status Bar
+   ========================================================================== */
+.ios-status-bar {
+  position: relative;
+  z-index: 40;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 28px 4px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.dynamic-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 122px;
+  height: 35px;
+  background: #000000;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  z-index: 45;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.15);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s ease;
+}
+
+.dynamic-island-sensor {
+  width: 11px;
+  height: 11px;
+  background: #0d0f17;
+  border-radius: 50%;
+  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.dynamic-island-camera {
+  width: 12px;
+  height: 12px;
+  background: #0d121c;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: inset 0 0 2px rgba(0, 100, 255, 0.4);
+}
+
+.status-time {
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-battery {
+  width: 23px;
+  height: 11.5px;
+  border: 1.5px solid currentColor;
+  border-radius: 3.5px;
+  padding: 1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.status-battery::after {
+  content: '';
+  position: absolute;
+  right: -3.5px;
+  top: 2.5px;
+  width: 2px;
+  height: 4px;
+  background: currentColor;
+  border-radius: 0 1.5px 1.5px 0;
+}
+
+.battery-fill {
+  width: 78%;
+  height: 100%;
+  background: currentColor;
+  border-radius: 1.5px;
+}
+
+/* ==========================================================================
+   Header Bar (Sticky Glass)
+   ========================================================================== */
+.app-header {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px 8px;
+}
+
+.header-location-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-glass);
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.header-location-badge:active {
+  transform: scale(0.97);
+}
+
+.header-location-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-glass);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+  position: relative;
+}
+
+.icon-btn:active {
+  transform: scale(0.94);
+}
+
+/* ==========================================================================
+   Scrollable Screen Area
+   ========================================================================== */
+.app-screen-viewport {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 18px 110px; /* Space for floating nav */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar */
+.app-screen-viewport::-webkit-scrollbar {
+  width: 4px;
+}
+.app-screen-viewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+.app-screen-viewport::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
+}
+
+/* Tab Views */
+.tab-view {
+  display: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab-view.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Floating Liquid Glass Bottom Navbar
+   ========================================================================== */
+.floating-navbar-container {
+  position: absolute;
+  bottom: 22px;
+  left: 16px;
+  right: 16px;
+  z-index: 50;
+  height: 64px;
+  border-radius: 9999px;
+  background: var(--bg-card);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-float-nav);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 6px;
+  user-select: none;
+}
+
+/* Sliding Pill Indicator */
+.nav-sliding-pill {
+  position: absolute;
+  top: 7px;
+  bottom: 7px;
+  border-radius: 9999px;
+  background: var(--sliding-pill-bg);
+  backdrop-filter: blur(12px);
+  pointer-events: none;
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), width 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+}
+
+.nav-item {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.15s ease;
+  padding: 0 4px;
+}
+
+.nav-item:active {
+  transform: scale(0.94);
+}
+
+.nav-item.active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.nav-item.active .nav-icon {
+  transform: translateY(-1px);
+}
+
+.nav-label {
+  font-size: 10.5px;
+  letter-spacing: -0.1px;
+}
+
+/* ==========================================================================
+   Liquid Glass Cards & Sections
+   ========================================================================== */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--border-glass);
+  border-radius: 26px;
+  box-shadow: var(--shadow-glass);
+  padding: 20px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  /* STABLE SURFACES: No jumpy hover effects on content cards */
+}
+
+/* Hero Weather Display */
+.hero-weather-section {
+  text-align: center;
+  padding: 16px 0 20px;
+}
+
+.hero-temp-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 6px 0;
+}
+
+.hero-temp {
+  font-size: 88px;
+  font-weight: 200;
+  line-height: 0.9;
+  letter-spacing: -3.5px;
+  color: var(--text-primary);
+}
+
+.hero-degree {
+  font-size: 40px;
+  font-weight: 300;
+  margin-top: 4px;
+  color: var(--text-primary);
+}
+
+.hero-condition {
+  font-size: 21px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.hero-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+
+.hero-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+/* Mini Metrics Grid (Wind, Humidity, Visibility) */
+.metrics-pill-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.metric-pill-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  box-shadow: var(--shadow-glass);
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.metric-pill-card .metric-icon {
+  color: var(--accent-blue);
+  opacity: 0.9;
+}
+
+.metric-pill-card .metric-val {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.metric-pill-card .metric-lbl {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Sentinel Shield Banner (Gökkalkan Nöbette)
+   ========================================================================== */
+.sentinel-banner {
+  background: var(--sentinel-bg);
+  border: 1px solid var(--sentinel-border);
+  box-shadow: 0 10px 30px -4px var(--sentinel-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-radius: 26px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.sentinel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.sentinel-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sentinel-text);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+  position: relative;
+}
+
+.sentinel-icon-wrap::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 17px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  animation: pulseShield 2.5s infinite;
+}
+
+@keyframes pulseShield {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 0.2; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.sentinel-titles {
+  flex: 1;
+}
+
+.sentinel-badge-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--sentinel-text);
+  margin-bottom: 2px;
+}
+
+.sentinel-main-msg {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.sentinel-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sentinel-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid var(--border-glass);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-glass);
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+[data-theme="dark"] .sentinel-btn {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.sentinel-btn:active {
+  transform: scale(0.96);
+}
+
+/* ==========================================================================
+   24-Hour Live Interactive Risk Scrubber
+   ========================================================================== */
+.scrubber-section {
+  margin-bottom: 16px;
+}
+
+.scrubber-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.scrubber-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.scrubber-active-pill {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  box-shadow: var(--shadow-glass);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.scrubber-track-container {
+  position: relative;
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  box-shadow: var(--shadow-glass);
+  padding: 16px 14px 12px;
+  overflow-x: auto;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-x;
+}
+
+.scrubber-track-container:active {
+  cursor: grabbing;
+}
+
+.scrubber-track-container::-webkit-scrollbar {
+  display: none;
+}
+
+.scrubber-bars-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  height: 96px;
+  padding-bottom: 24px;
+  position: relative;
+  min-width: max-content;
+}
+
+.scrubber-hour-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 24px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s ease;
+}
+
+.scrubber-hour-item:hover,
+.scrubber-hour-item.active {
+  transform: translateY(-2px);
+}
+
+.scrubber-bar {
+  width: 7px;
+  height: 48px;
+  background: rgba(16, 185, 129, 0.25);
+  border-radius: 9999px;
+  position: relative;
+  overflow: hidden;
+}
+
+.scrubber-bar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 9999px;
+  background: #10b981;
+  transition: height 0.3s ease, background 0.2s ease;
+}
+
+.scrubber-bar-fill.risk-caution {
+  background: #f59e0b;
+}
+
+.scrubber-bar-fill.risk-warn {
+  background: #f43f5e;
+}
+
+.scrubber-hour-item.active .scrubber-bar {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+.scrubber-hour-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+  position: absolute;
+  bottom: 0;
+  white-space: nowrap;
+}
+
+.scrubber-hour-item.active .scrubber-hour-label {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   4 SVG Arc Gauges Grid
+   ========================================================================== */
+.gauges-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.gauge-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass);
+  border-radius: 22px;
+  box-shadow: var(--shadow-glass);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.gauge-svg-wrap {
+  position: relative;
+  width: 90px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge-svg {
+  overflow: visible;
+  display: block;
+}
+
+.gauge-bg-arc {
+  fill: none;
+  stroke: var(--border-subtle);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.gauge-val-arc {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.3s ease;
+}
+
+.gauge-center-text {
+  position: absolute;
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gauge-val-number {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.gauge-val-unit {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.gauge-title-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 6px;
+}
+
+.gauge-status-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   Special Modules (Son Deprem, Tarlam, Denizde)
+   ========================================================================== */
+.module-earthquake-card {
+  background: var(--seismic-bg);
+  border: 1px solid var(--seismic-border);
+  border-radius: 24px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-glass);
+}
+
+.seismic-radar-bg {
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  width: 140px;
+  height: 140px;
+  pointer-events: none;
+  opacity: 0.25;
+}
+
+.seismic-wave-ring {
+  transform-origin: center;
+  animation: rippleRing 3s ease-out infinite;
+}
+
+.seismic-wave-ring:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.seismic-wave-ring:nth-child(3) {
+  animation-delay: 2s;
+}
+
+@keyframes rippleRing {
+  0% { r: 10; opacity: 1; }
+  100% { r: 60; opacity: 0; }
+}
+
+.earthquake-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.earthquake-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--seismic-accent);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.earthquake-time {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.earthquake-content {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.earthquake-mag {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--seismic-accent);
+  line-height: 1;
+}
+
+.earthquake-details {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.earthquake-sub {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.earthquake-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Two-column Special Cards: Tarlam & Denizde */
+.special-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.special-module-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass);
+  border-radius: 22px;
+  box-shadow: var(--shadow-glass);
+  padding: 16px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 140px;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.special-module-card:active {
+  transform: scale(0.97);
+}
+
+.special-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.special-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-glass);
+}
+
+.special-card-icon.agro {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.special-card-icon.marine {
+  background: rgba(2, 132, 199, 0.15);
+  color: #0284c7;
+}
+
+.special-badge-status {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.3px;
+}
+
+.special-badge-status.good {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.special-card-bottom {
+  display: flex;
+  flex-direction: column;
+}
+
+.special-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.special-card-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.special-card-cta {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   Tab 2: Map Section & Controls
+   ========================================================================== */
+.map-view-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.map-layer-selector {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 2px 6px;
+  user-select: none;
+}
+
+.map-layer-selector::-webkit-scrollbar {
+  display: none;
+}
+
+.layer-chip {
+  padding: 7px 14px;
+  border-radius: 9999px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--shadow-glass);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.layer-chip:active {
+  transform: scale(0.96);
+}
+
+.layer-chip.active {
+  background: var(--text-primary);
+  color: var(--bg-card-solid);
+  border-color: var(--text-primary);
+}
+
+.map-canvas-card {
+  position: relative;
+  height: 480px;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-glass);
+  background: #141e30;
+}
+
+.map-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.map-overlay-controls {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
+.map-ctrl-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-glass);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.map-ctrl-btn:active {
+  transform: scale(0.92);
+}
+
+.map-timeline-player {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  background: var(--bg-card);
+  backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  box-shadow: var(--shadow-glass);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.timeline-play-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  color: var(--bg-card-solid);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.timeline-play-btn:active {
+  transform: scale(0.94);
+}
+
+.timeline-slider-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeline-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.timeline-range-input {
+  width: 100%;
+  accent-color: var(--accent-blue);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Tab 3: Alerts View (Gökkalkan Nöbet Kuralları)
+   ========================================================================== */
+.alert-rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.alert-rule-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass);
+  border-radius: 22px;
+  box-shadow: var(--shadow-glass);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.alert-rule-info {
+  flex: 1;
+}
+
+.alert-rule-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.alert-rule-desc {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.alert-rule-threshold {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  margin-top: 6px;
+  padding: 2px 8px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+}
+
+/* iOS Toggle Switch */
+.ios-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.ios-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ios-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--border-subtle);
+  transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 30px;
+  border: 1px solid var(--border-glass);
+}
+
+.ios-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.ios-switch input:checked + .ios-switch-slider {
+  background-color: #10b981;
+}
+
+.ios-switch input:checked + .ios-switch-slider:before {
+  transform: translateX(20px);
+}
+
+/* Notification History Log */
+.section-subtitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.notif-logs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notif-log-item {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow-glass);
+  display: flex;
+  gap: 12px;
+}
+
+.notif-log-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notif-log-icon.info {
+  background: rgba(2, 132, 199, 0.15);
+  color: #0284c7;
+}
+
+.notif-log-icon.warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.notif-log-icon.alert {
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+}
+
+.notif-log-content {
+  flex: 1;
+}
+
+.notif-log-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.notif-log-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.notif-log-time {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+.notif-log-body {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+/* ==========================================================================
+   Tab 4: 7-Day Forecast & Range Bars (Apple Weather Style)
+   ========================================================================== */
+.daily-forecast-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.daily-row-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  box-shadow: var(--shadow-glass);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.daily-row-card:active {
+  transform: scale(0.98);
+}
+
+.daily-row-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.daily-day-label {
+  width: 75px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.daily-date-sub {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+.daily-icon-col {
+  width: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.daily-rain-prob {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+
+/* Apple Weather Gradient Range Bar */
+.daily-range-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.daily-temp-low {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  width: 25px;
+  text-align: right;
+}
+
+.daily-range-bar-track {
+  flex: 1;
+  height: 5px;
+  background: var(--border-subtle);
+  border-radius: 9999px;
+  position: relative;
+  overflow: visible;
+}
+
+.daily-range-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #38bdf8 0%, #fbbf24 60%, #f97316 100%);
+}
+
+.daily-current-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 9px;
+  height: 9px;
+  background: #ffffff;
+  border: 2px solid var(--accent-blue);
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.daily-temp-high {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  width: 25px;
+}
+
+/* Expandable Hourly Snippet for the Day */
+.daily-expanded-content {
+  display: none;
+  padding-top: 12px;
+  margin-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.daily-row-card.expanded .daily-expanded-content {
+  display: flex;
+  justify-content: space-around;
+  animation: fadeIn 0.25s ease;
+}
+
+.daily-hour-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.daily-meta-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-subtle);
+}
+
+.daily-badge-chip {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ==========================================================================
+   Tab 5: Settings View
+   ========================================================================== */
+.settings-section-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass);
+  border-radius: 22px;
+  box-shadow: var(--shadow-glass);
+  padding: 6px 0;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.settings-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.settings-item-row:last-child {
+  border-bottom: none;
+}
+
+.settings-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-item-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.settings-item-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* iOS Segmented Control */
+.segmented-control {
+  display: flex;
+  background: var(--bg-secondary);
+  padding: 3px;
+  border-radius: 12px;
+  user-select: none;
+}
+
+.segmented-option {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 9px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.segmented-option.active {
+  background: var(--bg-card-solid);
+  color: var(--text-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Locations List in Settings */
+.saved-loc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: pointer;
+}
+
+.saved-loc-item:hover {
+  background: var(--bg-secondary);
+}
+
+.saved-loc-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.saved-loc-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.saved-loc-tag {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   iOS Bottom Sheet Drawer & Modal
+   ========================================================================== */
+.drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.drawer-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 85%;
+  background: var(--bg-card-solid);
+  background-image: var(--bg-gradient);
+  border-top-left-radius: 36px;
+  border-top-right-radius: 36px;
+  border-top: 1px solid var(--border-glass);
+  box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.4);
+  z-index: 70;
+  padding: 12px 20px 36px;
+  transform: translateY(100%);
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+.drawer-sheet.active {
+  transform: translateY(0);
+}
+
+.drawer-handle {
+  width: 44px;
+  height: 5px;
+  background: var(--border-subtle);
+  border-radius: 9999px;
+  margin: 0 auto 16px;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.drawer-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Desktop Toolbar (Top Switcher for Frame vs Fullscreen)
+   ========================================================================== */
+.desktop-preview-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  background: rgba(25, 30, 42, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 8px 16px;
+  border-radius: 9999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  color: #f1f5f9;
+  font-size: 12px;
+  font-weight: 500;
+  user-select: none;
+  z-index: 100;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-size: 11.5px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.toolbar-btn:active {
+  transform: scale(0.96);
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

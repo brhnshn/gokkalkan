@@ -1,0 +1,99 @@
+/**
+ * GokKalkan Theme System
+ * Supports Light Mode (Alabaster & Soft Sky #f4f6fa) & Dark Mode (Deep Midnight #0b0f19)
+ * Circular Theme Wipe transition support.
+ */
+
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Light Theme (Default Focus) */
+  --bg-app: #f4f6fa;
+  --bg-gradient: radial-gradient(120% 80% at 50% -10%, #e0e9f8 0%, #f4f6fa 60%, #eaf0f9 100%);
+  --bg-card: rgba(255, 255, 255, 0.72);
+  --bg-card-hover: rgba(255, 255, 255, 0.85);
+  --bg-card-solid: #ffffff;
+  --bg-secondary: rgba(235, 240, 248, 0.85);
+  --bg-glass-pill: rgba(255, 255, 255, 0.75);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #8e9bb0;
+  
+  --border-glass: rgba(255, 255, 255, 0.85);
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  
+  --shadow-glass: 0 10px 30px -6px rgba(15, 23, 42, 0.07), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  --shadow-float-nav: 0 16px 40px -8px rgba(15, 23, 42, 0.15), inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+  --sliding-pill-bg: rgba(15, 23, 42, 0.07);
+  
+  /* Sentinel Emerald */
+  --sentinel-bg: rgba(16, 185, 129, 0.12);
+  --sentinel-border: rgba(16, 185, 129, 0.35);
+  --sentinel-text: #047857;
+  --sentinel-glow: rgba(16, 185, 129, 0.25);
+  
+  /* Seismic Crimson */
+  --seismic-accent: #f43f5e;
+  --seismic-bg: rgba(244, 63, 94, 0.08);
+  --seismic-border: rgba(244, 63, 94, 0.25);
+  
+  /* Accent Colors */
+  --accent-blue: #0284c7;
+  --accent-amber: #d97706;
+  --accent-purple: #7c3aed;
+  
+  /* Phone Frame in Desktop View */
+  --mockup-bezel: #1c1d22;
+  --mockup-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.35);
+}
+
+/* Dark Theme (Deep Midnight) */
+[data-theme="dark"] {
+  --bg-app: #0b0f19;
+  --bg-gradient: radial-gradient(120% 80% at 50% -10%, #151e33 0%, #0b0f19 65%, #080c14 100%);
+  --bg-card: rgba(18, 24, 38, 0.72);
+  --bg-card-hover: rgba(24, 32, 50, 0.85);
+  --bg-card-solid: #121826;
+  --bg-secondary: rgba(24, 32, 50, 0.75);
+  --bg-glass-pill: rgba(24, 32, 50, 0.75);
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-glass: rgba(255, 255, 255, 0.14);
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  
+  --shadow-glass: 0 16px 40px -8px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
+  --shadow-float-nav: 0 20px 45px -8px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.28);
+  --sliding-pill-bg: rgba(255, 255, 255, 0.16);
+  
+  --sentinel-bg: rgba(5, 150, 105, 0.18);
+  --sentinel-border: rgba(16, 185, 129, 0.4);
+  --sentinel-text: #34d399;
+  --sentinel-glow: rgba(16, 185, 129, 0.35);
+  
+  --seismic-accent: #fb7185;
+  --seismic-bg: rgba(244, 63, 94, 0.15);
+  --seismic-border: rgba(244, 63, 94, 0.35);
+  
+  --accent-blue: #38bdf8;
+  --accent-amber: #fbbf24;
+  --accent-purple: #a78bfa;
+}
+
+/* Circular Wipe Layer for Theme Change */
+.theme-wipe-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: var(--bg-app);
+  clip-path: circle(0% at var(--wipe-x, 50%) var(--wipe-y, 50%));
+  transition: clip-path 0.55s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.theme-wipe-overlay.active {
+  clip-path: circle(160% at var(--wipe-x, 50%) var(--wipe-y, 50%));
+}

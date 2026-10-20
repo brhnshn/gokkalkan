@@ -1,0 +1,255 @@
+@import 'leaflet/dist/leaflet.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+
+  /* Light Theme (Alabaster & Crisp Slate) */
+  --bg-app: #f4f6fa;
+  --bg-gradient: radial-gradient(120% 85% at 50% -10%, #e1eaf7 0%, #f4f6fa 60%, #e9f0f9 100%);
+  --bg-card: rgba(255, 255, 255, 0.76);
+  --bg-card-hover: rgba(255, 255, 255, 0.90);
+  --bg-card-solid: #ffffff;
+  --bg-secondary: rgba(235, 240, 248, 0.85);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #8e9bb0;
+
+  --border-glass: rgba(255, 255, 255, 0.85);
+  --border-subtle: rgba(15, 23, 42, 0.08);
+
+  --shadow-glass: 0 10px 30px -6px rgba(15, 23, 42, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  --shadow-float-nav: 0 16px 42px -8px rgba(15, 23, 42, 0.16), inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+  --sliding-pill-bg: rgba(15, 23, 42, 0.07);
+
+  /* Sentinel Emerald */
+  --sentinel-bg: rgba(16, 185, 129, 0.12);
+  --sentinel-border: rgba(16, 185, 129, 0.35);
+  --sentinel-text: #047857;
+
+  /* Accent */
+  --accent-blue: #0284c7;
+  --accent-amber: #f59e0b;
+  --accent-danger: #ef4444;
+}
+
+[data-theme="dark"] {
+  /* Dark Theme (Deep Midnight) */
+  --bg-app: #0b0f19;
+  --bg-gradient: radial-gradient(120% 85% at 50% -10%, #151e33 0%, #0b0f19 65%, #080c14 100%);
+  --bg-card: rgba(22, 29, 45, 0.72);
+  --bg-card-hover: rgba(30, 41, 64, 0.85);
+  --bg-card-solid: #121826;
+  --bg-secondary: rgba(26, 35, 54, 0.75);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --border-glass: rgba(255, 255, 255, 0.16);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+
+  --shadow-glass: 0 16px 40px -8px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
+  --shadow-float-nav: 0 20px 48px -8px rgba(0, 0, 0, 0.75), inset 0 1px 0 0 rgba(255, 255, 255, 0.28);
+  --sliding-pill-bg: rgba(255, 255, 255, 0.15);
+
+  --sentinel-bg: rgba(5, 150, 105, 0.18);
+  --sentinel-border: rgba(16, 185, 129, 0.4);
+  --sentinel-text: #34d399;
+
+  --accent-blue: #38bdf8;
+  --accent-amber: #eab308;
+  --accent-danger: #dc2626;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glass Utilities */
+.liquid-glass {
+  background: var(--bg-card);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-glass);
+}
+
+.liquid-nav-glass {
+  background: var(--bg-card);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-float-nav);
+}
+
+/* Tactile bounce on interaction */
+.tactile-active:active {
+  transform: scale(0.97);
+}
+
+/* Theme Wipe Overlay */
+.theme-wipe-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: var(--wipe-bg, #0b0f19);
+  clip-path: circle(0px at var(--wipe-x, 50%) var(--wipe-y, 50%));
+  transition: clip-path 0.52s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: clip-path;
+}
+
+.theme-wipe-canvas.wipe-active {
+  clip-path: circle(160% at var(--wipe-x, 50%) var(--wipe-y, 50%));
+}
+
+/* Hide scrollbars but keep scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Sismik Radar ve Kalkan Nabız Animasyonları */
+@keyframes pulseShield {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 0.2; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+@keyframes rippleRing {
+  0% { r: 10px; opacity: 0.9; }
+  100% { r: 60px; opacity: 0; }
+}
+
+.animate-pulse-shield {
+  animation: pulseShield 2.5s infinite ease-in-out;
+}
+
+.seismic-wave-ring {
+  transform-origin: center;
+  animation: rippleRing 3s ease-out infinite;
+}
+
+.seismic-wave-ring:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.seismic-wave-ring:nth-child(3) {
+  animation-delay: 2s;
+}
+
+/* Motion Design - Apple HIG Smooth Springs */
+@keyframes sheetSlideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes modalPopIn {
+  0% {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes backdropFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes viewFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-sheet-up {
+  animation: sheetSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.animate-modal-pop {
+  animation: modalPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.animate-backdrop {
+  animation: backdropFadeIn 0.25s ease-out forwards;
+  will-change: opacity;
+}
+
+.animate-view-fade {
+  animation: viewFadeIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Leaflet Liquid Glass Popups & Tooltips */
+.leaflet-popup.liquid-glass-leaflet-popup .leaflet-popup-content-wrapper {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 1rem;
+}
+.leaflet-popup.liquid-glass-leaflet-popup .leaflet-popup-content {
+  margin: 0 !important;
+  line-height: inherit !important;
+}
+.leaflet-popup.liquid-glass-leaflet-popup .leaflet-popup-tip-container {
+  display: none !important;
+}
+
+.liquid-glass-tooltip {
+  background: rgba(15, 23, 42, 0.82) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  padding: 4px 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+.liquid-glass-tooltip:before {
+  border-top-color: rgba(15, 23, 42, 0.82) !important;
+}
+
+/* OpenStreetMap Dark Mode Filter (Apple Midnight Radar Style) - Sıfır API Key, Sıfır Filigran */
+.osm-dark-tiles,
+.osm-dark-tiles img {
+  filter: invert(100%) hue-rotate(180deg) brightness(88%) contrast(92%);
+}
+
+

@@ -1,0 +1,17 @@
+{
+  "name": "gokkalkan-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GÖKKALKAN - Bölgesel Risk ve Hava Radarı Monorepo",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "npm run test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
